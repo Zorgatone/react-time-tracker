@@ -1,0 +1,7 @@
+.timer-counter {
+  display: inline-block;
+}
+
+.timer .timer-start {
+  margin-left: 6px;
+}

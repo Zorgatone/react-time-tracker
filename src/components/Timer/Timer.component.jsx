@@ -29,9 +29,6 @@ export class Timer extends Component {
         <button onClick={this.toggle.bind(this)} type="button" className="timer-start">
           { running ? 'Stop' : 'Start' } timer
         </button>
-        <button onClick={this.reset.bind(this)} type="button" className="timer-reset">
-          Reset
-        </button>
       </div>
     );
   }
@@ -41,20 +38,6 @@ export class Timer extends Component {
       this.stop();
     } else {
       this.start();
-    }
-  }
-
-  reset() {
-    if (
-      this.state.hours > 0 ||
-      this.state.minutes > 0 ||
-      this.state.seconds > 0
-    ) {
-      this.setState(Object.assign({}, this.state, {
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-      }));
     }
   }
 
@@ -96,9 +79,18 @@ export class Timer extends Component {
 
     clearInterval(this.state.timer);
 
+    if ('function' === typeof this.props.onComplete) {
+      const { hours, minutes, seconds } = this.state;
+
+      this.props.onComplete({ hours, minutes, seconds });
+    }
+
     this.setState(Object.assign({}, this.state, {
       running: false,
-      timer: null
+      timer: null,
+      hours: 0,
+      minutes: 0,
+      seconds: 0
     }));
   }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { precisionNow } from '../../utilities/precisionNow';
-import { Btn } from '../Btn';
+import { BtnPrimary } from '../BtnPrimary';
 
 import './Timer.style.css';
 
@@ -50,9 +50,9 @@ export class Timer extends Component {
           <span className="minutes">{minutes}</span>:
           <span className="seconds">{seconds}</span>
         </div>
-        <Btn onClick={this.toggle.bind(this)} className="button timer-start">
+        <BtnPrimary onClick={this.toggle.bind(this)} className="button timer-start">
           { running ? 'Stop' : 'Start' } timer
-        </Btn>
+        </BtnPrimary>
       </div>
     );
   }

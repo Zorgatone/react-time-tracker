@@ -5,7 +5,10 @@ import './Btn.style.css';
 
 export const Btn = (props) => (
   <button
-    className={classNames('button', props.className)}
+    className={classNames('button', props.className, {
+      'button-primary': !!props.primary,
+      'button-secondary': !!props.secondary
+    })}
     onClick={props.onClick}
     type={props.type || 'button'}
   >

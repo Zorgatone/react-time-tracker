@@ -1,0 +1,18 @@
+.button {
+  display: flex;
+}
+
+.button {
+  margin: 0;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  border-radius: 6px;
+  padding: 6px;
+}
+
+.button.button-primary {
+  background-color: #2266FF;
+  color: #FAFAFA;
+  border-color: #112277;
+}

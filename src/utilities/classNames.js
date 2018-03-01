@@ -28,8 +28,8 @@ export const classNames = (...args) => (
           if ('object' === typeof arg && null !== arg) {
             return Object.keys(arg)
               .reduce((acc, key) => (
-                arg[key] === true ? acc.concat(arg[key]
-              ) : acc), []);
+                arg[key] === true ? acc.concat(key) : acc), []
+              );
           }
 
           return null;

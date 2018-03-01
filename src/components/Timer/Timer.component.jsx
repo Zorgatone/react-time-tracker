@@ -9,28 +9,54 @@ export class Timer extends Component {
 
     this.state = {
       running: false,
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
-      timer: null
+      startTime: null,
+      lastTime: null,
+      elapsedTime: null
     };
   }
 
   render() {
-    const { running, hours, minutes, seconds } = this.state;
+    const running = this.state.running;
+    let hours = '00';
+    let minutes = '00';
+    let seconds = '00';
+
+    if (running) {
+      let elapsedTime = this.state.elapsedTime;
+      const h = Math.floor(elapsedTime / 3600000);
+      if (h > 0) { elapsedTime -= h * 3600000; }
+      const m = Math.floor(elapsedTime / 60000);
+      if (m > 0) { elapsedTime -= m * 60000; }
+      const s = Math.floor(elapsedTime / 1000);
+
+      hours = h.toString().padStart(2, '0');
+      minutes = m.toString().padStart(2, '0');
+      seconds = s.toString().padStart(2, '0');
+    }
 
     return (
       <div className="timer">
         <div className="timer-counter">
-          <span className="hours">{hours < 10 ? '0'+ hours : hours}</span>:
-          <span className="minutes">{minutes < 10 ? '0' + minutes : minutes}</span>:
-          <span className="seconds">{seconds < 10 ? '0' + seconds : seconds}</span>
+          <span className="hours">{hours}</span>:
+          <span className="minutes">{minutes}</span>:
+          <span className="seconds">{seconds}</span>
         </div>
         <button onClick={this.toggle.bind(this)} type="button" className="timer-start">
           { running ? 'Stop' : 'Start' } timer
         </button>
       </div>
     );
+  }
+
+  step() {
+    if (this.state.running) {
+      const time = window.performance.now();
+      this.setState(Object.assign({}, this.state, {
+        lastTime: time,
+        elapsedTime: time - this.state.startTime
+      }));
+      window.requestAnimationFrame(this.step.bind(this));
+    }
   }
 
   toggle() {
@@ -46,30 +72,16 @@ export class Timer extends Component {
       return;
     }
 
-    this.setState(Object.assign({}, this.state, {
-      running: true,
-      timer: setInterval(() => {
-        let { hours, minutes, seconds, running } = this.state;
+    const now = window.performance.now();
 
-        if (running) {
-          if (seconds + 1 > 59) {
-            seconds = 0;
-            if (minutes + 1 > 59) {
-              minutes = 0;
-              hours++;
-            } else {
-              minutes++;
-            }
-          } else {
-            seconds++;
-          }
-  
-          this.setState(Object.assign({}, this.state, {
-            hours, minutes, seconds
-          }));
-        }
-      }, 1000)
+    this.setState(Object.assign({}, this.state, {
+      startTime: now,
+      lastTime: now,
+      elapsedTime: 0,
+      running: true
     }));
+
+    window.requestAnimationFrame(this.step.bind(this));
   }
 
   stop() {
@@ -77,21 +89,14 @@ export class Timer extends Component {
       return;
     }
 
-    clearInterval(this.state.timer);
-
-    if ('function' === typeof this.props.onComplete) {
-      const { hours, minutes, seconds } = this.state;
-
-      this.props.onComplete({ hours, minutes, seconds });
-    }
-
     this.setState(Object.assign({}, this.state, {
       running: false,
-      timer: null,
-      hours: 0,
-      minutes: 0,
-      seconds: 0
+      elapsedTime: 0
     }));
+
+    if ('function' === typeof this.props.onComplete) {
+      this.props.onComplete(this.state.elapsedTime);
+    }
   }
 
 }

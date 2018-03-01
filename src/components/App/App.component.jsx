@@ -28,9 +28,9 @@ export class App extends Component {
     );
   }
 
-  onComplete({ hours, minutes, seconds }) {
+  onComplete(elapsedTime) {
     this.setState(Object.assign({}, this.state, {
-      tasks: (this.state.tasks || []).concat({ hours, minutes, seconds })
+      tasks: (this.state.tasks || []).concat(elapsedTime)
     }));
   }
 
@@ -39,8 +39,12 @@ export class App extends Component {
 
     return (
       <ul>
-        {this.state.tasks.map((task) => {
-          const { hours, minutes, seconds } = task;
+        {this.state.tasks.map((elapsedTime) => {
+          const hours = Math.floor(elapsedTime / 3600000);
+          if (hours > 0) { elapsedTime -= hours * 3600000; }
+          const minutes = Math.floor(elapsedTime / 60000);
+          if (minutes > 0) { elapsedTime -= minutes * 60000; }
+          const seconds = Math.floor(elapsedTime / 1000);
 
           return (
             <li key={i++}>

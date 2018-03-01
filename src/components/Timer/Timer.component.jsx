@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { precisionNow } from '../../utilities/precisionNow';
 import { Btn } from '../Btn';
 
 import './Timer.style.css';
@@ -52,7 +53,7 @@ export class Timer extends Component {
 
   step() {
     if (this.state.running) {
-      const time = window.performance.now();
+      const time = precisionNow();
       this.setState(Object.assign({}, this.state, {
         lastTime: time,
         elapsedTime: time - this.state.startTime
@@ -74,7 +75,7 @@ export class Timer extends Component {
       return;
     }
 
-    const now = window.performance.now();
+    const now = precisionNow();
 
     this.setState(Object.assign({}, this.state, {
       startTime: now,

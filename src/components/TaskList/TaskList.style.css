@@ -1,0 +1,9 @@
+.task-list, .task-list ul {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.task-list ul {
+  flex-direction: column-reverse;
+}

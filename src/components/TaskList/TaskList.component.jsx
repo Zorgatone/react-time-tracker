@@ -25,7 +25,7 @@ export class TaskList extends Component {
   }
 
   renderTasks() {
-    return this.state.tasks.reverse()
+    return this.state.tasks
       .map((duration, index) => (
         <Task key={index} duration={duration}></Task>
       ));

@@ -16,5 +16,12 @@
 }
 
 .app .app-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.app .app-body,
+.app .app-body .task-list {
   flex-grow: 1;
 }

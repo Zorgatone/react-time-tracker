@@ -18,6 +18,12 @@ export class Timer extends Component {
     };
   }
 
+  componentDidMount() {
+    if (this.props.start === true) {
+      this.start();
+    }
+  }
+
   render() {
     const running = this.state.running;
     let hours = '00';

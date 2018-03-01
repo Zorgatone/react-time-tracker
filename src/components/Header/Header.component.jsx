@@ -7,7 +7,7 @@ export class Header extends Component {
   render() {
     return (
       <div className="header">
-        <i>Header works!</i>
+        <h1>{this.props.title}</h1>
       </div>
     );
   }

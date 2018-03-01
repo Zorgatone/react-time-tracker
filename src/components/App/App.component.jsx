@@ -12,10 +12,11 @@ export class App extends Component {
   render() {
     return (
       <div className="app">
-        <Header />
-        <i>Hello, World</i>
-        <Timer onComplete={this.onComplete.bind(this)} />
-        <TaskList ref={(taskList) => { this.taskList = taskList; }} />
+        <Header title="Time tracker app" />
+        <div className="app-body">
+          <Timer onComplete={this.onComplete.bind(this)} />
+          <TaskList ref={(taskList) => { this.taskList = taskList; }} />
+        </div>
         <Footer />
       </div>
     );

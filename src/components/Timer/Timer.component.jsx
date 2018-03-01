@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { Btn } from '../Btn';
+
 import './Timer.style.css';
 
 export class Timer extends Component {
@@ -41,9 +43,9 @@ export class Timer extends Component {
           <span className="minutes">{minutes}</span>:
           <span className="seconds">{seconds}</span>
         </div>
-        <button onClick={this.toggle.bind(this)} type="button" className="timer-start">
+        <Btn onClick={this.toggle.bind(this)} className="button timer-start">
           { running ? 'Stop' : 'Start' } timer
-        </button>
+        </Btn>
       </div>
     );
   }

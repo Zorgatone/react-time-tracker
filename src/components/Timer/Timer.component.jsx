@@ -14,10 +14,15 @@ export class Timer extends Component {
     this.state = {
       label: '',
       running: false,
-      startTime: null,
-      lastTime: null,
-      elapsedTime: null
+      startTimestamp: null,
+      lastTimestamp: null,
+      elapsedTimestamp: null,
+      startDate: null
     };
+
+    this.updateLabel = this.updateLabel.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.step = this.step.bind(this);
   }
 
   componentDidMount() {
@@ -27,11 +32,9 @@ export class Timer extends Component {
   }
 
   updateLabel(event) {
-    if (String.fromCharCode(event.which)) {
-      this.setState(Object.assign({}, this.state, {
-        label: this.state.label + String.fromCharCode(event.which)
-      }))
-    }
+    this.setState(Object.assign({}, this.state, {
+      label: event.target.value
+    }));
   }
 
   render() {
@@ -41,12 +44,12 @@ export class Timer extends Component {
     let seconds = '00';
 
     if (running) {
-      let elapsedTime = this.state.elapsedTime;
-      const h = Math.floor(elapsedTime / 3600000);
-      if (h > 0) { elapsedTime -= h * 3600000; }
-      const m = Math.floor(elapsedTime / 60000);
-      if (m > 0) { elapsedTime -= m * 60000; }
-      const s = Math.floor(elapsedTime / 1000);
+      let elapsedTimestamp = this.state.elapsedTimestamp;
+      const h = Math.floor(elapsedTimestamp / 3600000);
+      if (h > 0) { elapsedTimestamp -= h * 3600000; }
+      const m = Math.floor(elapsedTimestamp / 60000);
+      if (m > 0) { elapsedTimestamp -= m * 60000; }
+      const s = Math.floor(elapsedTimestamp / 1000);
 
       hours = h.toString().padStart(2, '0');
       minutes = m.toString().padStart(2, '0');
@@ -56,14 +59,14 @@ export class Timer extends Component {
     return (
       <div className="timer">
         <div className="timer-name">
-          <TextField onKeyPress={this.updateLabel.bind(this)} value={this.state.label} />
+          <TextField onKeyPress={this.updateLabel} />
         </div>
         <div className="timer-counter">
           <span className="hours">{hours}</span>:
           <span className="minutes">{minutes}</span>:
           <span className="seconds">{seconds}</span>
         </div>
-        <BtnPrimary onClick={this.toggle.bind(this)} className="button timer-start">
+        <BtnPrimary onClick={this.toggle} className="button timer-start">
           { running ? 'Stop' : 'Start' } timer
         </BtnPrimary>
       </div>
@@ -74,10 +77,10 @@ export class Timer extends Component {
     if (this.state.running) {
       const time = precisionNow();
       this.setState(Object.assign({}, this.state, {
-        lastTime: time,
-        elapsedTime: time - this.state.startTime
+        lastTimestamp: time,
+        elapsedTimestamp: time - this.state.startTimestamp
       }));
-      window.requestAnimationFrame(this.step.bind(this));
+      window.requestAnimationFrame(this.step);
     }
   }
 
@@ -97,13 +100,14 @@ export class Timer extends Component {
     const now = precisionNow();
 
     this.setState(Object.assign({}, this.state, {
-      startTime: now,
-      lastTime: now,
-      elapsedTime: 0,
+      startDate: new Date(),
+      startTimestamp: now,
+      lastTimestamp: now,
+      elapsedTimestamp: 0,
       running: true
     }));
 
-    window.requestAnimationFrame(this.step.bind(this));
+    window.requestAnimationFrame(this.step);
   }
 
   stop() {
@@ -113,11 +117,15 @@ export class Timer extends Component {
 
     this.setState(Object.assign({}, this.state, {
       running: false,
-      elapsedTime: 0
+      elapsedTimestamp: 0
     }));
 
     if ('function' === typeof this.props.onComplete) {
-      this.props.onComplete(this.state.elapsedTime);
+      this.props.onComplete({
+        startDate: this.state.startDate,
+        label: this.state.label,
+        elapsedTimestamp: this.state.elapsedTimestamp
+      });
     }
   }
 

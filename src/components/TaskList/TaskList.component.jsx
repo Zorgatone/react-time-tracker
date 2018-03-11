@@ -26,8 +26,11 @@ export class TaskList extends Component {
 
   renderTasks() {
     return this.state.tasks
-      .map((duration, index) => (
-        <Task key={index} duration={duration}></Task>
+      .map(({
+        label,
+        elapsedTimestamp: duration
+      }, index) => (
+        <Task key={index} label={label} duration={duration}></Task>
       ));
   }
 

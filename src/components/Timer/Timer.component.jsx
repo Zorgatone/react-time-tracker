@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { precisionNow } from '../../utilities/precisionNow';
 import { BtnPrimary } from '../BtnPrimary';
+import { TextField } from '../TextField';
 
 import './Timer.style.css';
 
@@ -11,6 +12,7 @@ export class Timer extends Component {
     super();
 
     this.state = {
+      label: '',
       running: false,
       startTime: null,
       lastTime: null,
@@ -21,6 +23,14 @@ export class Timer extends Component {
   componentDidMount() {
     if (this.props.start === true) {
       this.start();
+    }
+  }
+
+  updateLabel(event) {
+    if (String.fromCharCode(event.which)) {
+      this.setState(Object.assign({}, this.state, {
+        label: this.state.label + String.fromCharCode(event.which)
+      }))
     }
   }
 
@@ -45,6 +55,9 @@ export class Timer extends Component {
 
     return (
       <div className="timer">
+        <div className="timer-name">
+          <TextField onKeyPress={this.updateLabel.bind(this)} value={this.state.label} />
+        </div>
         <div className="timer-counter">
           <span className="hours">{hours}</span>:
           <span className="minutes">{minutes}</span>:

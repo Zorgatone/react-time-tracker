@@ -15,3 +15,5 @@ export const Task = ({ duration }) => {
     </li>
   );
 };
+
+export default Task;
